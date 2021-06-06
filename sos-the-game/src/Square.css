@@ -2,12 +2,11 @@
   height: 90px;
   width: 95px;
   border: 5px solid lightgray;
-  border-radius: 3px;
   margin-top: -5px;
   margin-right: -5px;
+  color: darkblue;
   font-size: 50px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: darkblue;
   font-weight: 600;
   cursor: pointer;
 }

@@ -20,7 +20,9 @@ class Square extends React.Component<ISqProps, ISqState> {
 
   render() {
     return (
-      <button className="square" onClick={this.handleClick} onContextMenu={this.handleRightClick}>{this.state.value}</button>
+      <button className="square"
+              onClick={this.handleClick}
+              onContextMenu={this.handleRightClick}>{this.state.value}</button>
     );
   }
 
