@@ -1,6 +1,6 @@
 import React from "react";
 import SoSGrid from "./SoSGrid";
-import Score from "./Score";
+import ScoreBoard from "./ScoreBoard";
 import './Game.css';
 
 interface IGameProps {}
@@ -36,7 +36,8 @@ class Game extends React.Component<IGameProps, IGameState> {
       <div className="Game">
         <h1>SOS</h1>
         <SoSGrid onSOS={this.handleSOS} onGridFull={this.handleFullGrid} onTurnEnd={this.handleChangeTurns}/>
-        <Score gameEnd={this.state.gameEnd} players={this.state.players}/>
+        <hr className="solid"></hr>
+        <ScoreBoard gameEnd={this.state.gameEnd} players={this.state.players}/>
       </div>
     );
   }

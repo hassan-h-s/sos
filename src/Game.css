@@ -5,3 +5,8 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
 }
+
+/* Solid border */
+hr.solid {
+  border-top: 3px solid #bbb;
+}
