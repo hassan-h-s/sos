@@ -41,7 +41,11 @@ class SoSGrid extends React.Component<IGridProps, IGridState> {
     let squares = [...this.state.squares];
     squares[idx] = value;
     this.setState({squares}, () => {
-      this.isSOS(idx);
+      if(this.isSOS(idx)){
+        this.props.onSOS();
+      } else {
+        this.props.onTurnEnd();
+      }
       if (this.gridIsFull()){
         this.props.onGridFull();
       }
@@ -53,7 +57,7 @@ class SoSGrid extends React.Component<IGridProps, IGridState> {
     // this.props.onSOS();
     // if not, set turn to other player
     // this.props.onTurnEnd();
-    return true;
+    return false;
   }
 
   private gridIsFull(): boolean {

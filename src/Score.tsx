@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
 import { IPlayerInfo } from './Game';
+import './Score.css'
 
 interface IScoreProps { 
   gameEnd: boolean;
