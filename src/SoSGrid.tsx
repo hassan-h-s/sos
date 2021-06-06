@@ -57,7 +57,7 @@ class SoSGrid extends React.Component<IGridProps, IGridState> {
     // this.props.onSOS();
     // if not, set turn to other player
     // this.props.onTurnEnd();
-    return false;
+    return true;
   }
 
   private gridIsFull(): boolean {

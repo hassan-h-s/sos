@@ -29,9 +29,11 @@ class Score extends React.Component<IScoreProps> {
             <TableRow>
               <TableCell>
                 Player 1
+                {(this.props.players[0].active) ? 'Active' : ''}
               </TableCell>
               <TableCell>
                 Player 2
+                {(this.props.players[1].active) ? 'Active' : ''}
               </TableCell>
             </TableRow>
             <TableRow>
