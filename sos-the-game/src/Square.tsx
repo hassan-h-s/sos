@@ -3,6 +3,7 @@ import './Square.css';
 
 interface ISqProps {
   idx: number
+  onValueChange: (idx: number, value: string) => void;
 }
 
 interface ISqState {
@@ -19,8 +20,23 @@ class Square extends React.Component<ISqProps, ISqState> {
 
   render() {
     return (
-      <button className="square" onClick={()=> this.setState({value: this.state.value === 'S' ? 'O' : 'S'})}>{this.state.value}</button>
+      <button className="square" onClick={this.handleClick} onContextMenu={this.handleRightClick}>{this.state.value}</button>
     );
+  }
+
+  private handleClick = () => {
+    if(!this.state.value){
+      this.setState({value: 'S'});
+      this.props.onValueChange(this.props.idx, 'S');
+    }
+  }
+
+  private handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if(!this.state.value){
+      this.setState({value: 'O'});
+      this.props.onValueChange(this.props.idx, 'O');
+    }
   }
 }
 

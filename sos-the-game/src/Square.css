@@ -1,9 +1,13 @@
 .square {
-  height: 70px;
-  width: 73px;
-  background: white;
-  border: 3px groove white;
-  margin-top: -3px;
-  margin-right: -3px;
-  font-size: 30px;
+  height: 90px;
+  width: 95px;
+  border: 5px solid lightgray;
+  border-radius: 3px;
+  margin-top: -5px;
+  margin-right: -5px;
+  font-size: 50px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: darkblue;
+  font-weight: 600;
+  cursor: pointer;
 }

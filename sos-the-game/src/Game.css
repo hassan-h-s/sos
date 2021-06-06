@@ -1,6 +1,7 @@
 .Game {
-  width: 420px;
+  width: 545px;
   margin: auto;
+  color: darkblue;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
 }
