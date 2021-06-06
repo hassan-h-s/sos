@@ -1,12 +1,13 @@
 import React from "react";
+import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
+import { IPlayerInfo } from './Game';
 
 interface IScoreProps { 
   gameEnd: boolean;
+  players: [IPlayerInfo, IPlayerInfo];
 }
 
-interface IScoreState { 
-}
-class Score extends React.Component<IScoreProps, IScoreState> {
+class Score extends React.Component<IScoreProps> {
   render() {
     if (this.props.gameEnd){
       return (
@@ -15,12 +16,35 @@ class Score extends React.Component<IScoreProps, IScoreState> {
         </h2>
       )
     } else {
-      return (
-        <h2>
-          Score:
-        </h2>
-      )
+      return this.renderResultsTable();
     }
+  }
+
+  private renderResultsTable(): JSX.Element{
+    return (
+      <TableContainer>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                Player 1
+              </TableCell>
+              <TableCell>
+                Player 2
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                {this.props.players[0].score}
+              </TableCell>
+              <TableCell>
+                {this.props.players[1].score}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
   }
 }
 

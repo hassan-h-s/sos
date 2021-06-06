@@ -3,19 +3,31 @@ import SoSGrid from "./SoSGrid";
 import Score from "./Score";
 import './Game.css';
 
-interface IGameProps { 
-
-}
+interface IGameProps {}
 
 interface IGameState { 
   gameEnd: boolean;
+  players: [IPlayerInfo, IPlayerInfo]
+}
+
+export interface IPlayerInfo {
+  active: boolean,
+  score: number
 }
 
 class Game extends React.Component<IGameProps, IGameState> {
   constructor(props: IGameProps){
     super(props);
     this.state = {
-      gameEnd: false
+      gameEnd: false,
+      players: [{
+        active: true,
+        score: 0
+      },
+      {
+        active: false,
+        score: 0
+      }]
     };
   }
 
@@ -24,7 +36,7 @@ class Game extends React.Component<IGameProps, IGameState> {
       <div className="Game">
         <h1>SOS</h1>
         <SoSGrid onSOS={this.handlers} onGridFull={this.handleFullGrid.bind(this)} onTurnEnd={this.handlers}/>
-        <Score gameEnd={this.state.gameEnd}/>
+        <Score gameEnd={this.state.gameEnd} players={this.state.players}/>
       </div>
     );
   }
@@ -34,7 +46,6 @@ class Game extends React.Component<IGameProps, IGameState> {
   }
 
   private handleFullGrid(){
-    console.log("GRID IS FULL!");
     this.setState({gameEnd: true});
   }
 }
