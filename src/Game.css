@@ -6,7 +6,11 @@
   text-align: center;
 }
 
-/* Solid border */
 hr.solid {
   border-top: 3px solid #bbb;
+}
+
+h1 {
+  font-size: 40px;
+  margin-block-end: 0;
 }

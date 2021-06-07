@@ -1,36 +1,42 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
-import { IPlayerInfo } from './Game';
+import { makeStyles, Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
+import { PlayerInfo } from "./Game";
 
-interface IScoreProps { 
+type ScoreProps = { 
   gameEnd: boolean;
-  players: [IPlayerInfo, IPlayerInfo];
+  playerInfo: PlayerInfo[];
 }
 
+const useStyles = makeStyles({
+  active: {
+    background: '#7DCEA0',
+  },
+  table: {
+    fontSize: '20px',
+    color: 'darkblue'
+  }
+});
 
-class ScoreBoard extends React.Component<IScoreProps> {
-  render() {
-    if (!this.props.gameEnd){
-        return this.renderScoreTable();
-    } else {
-        return this.renderGameEndResult();
-    }
+function ScoreBoard (props: ScoreProps): JSX.Element {
+
+  const classes = useStyles();
+
+  if (!props.gameEnd){
+    return renderScoreTable();
+  } else {
+    return renderGameEndResult();
   }
 
-  private renderScoreTable(): JSX.Element {
-    let activePlayer = {
-      backgroundColor: '#7DCEA0'
-    };
-
+  function renderScoreTable(): JSX.Element {
     return (
       <TableContainer>
         <Table className="scoreboard">
-          <TableBody>
-            {this.props.players.map((info, idx) => {
+          <TableBody >
+            {props.playerInfo.map((info, idx) => {
               return (
-              <TableRow key={idx} style={info.active ? activePlayer : {}}>
-                <TableCell> Player {idx+1} </TableCell>
-                <TableCell> {info.score} </TableCell>
+              <TableRow key={idx} className={info.active ? classes.active : ''}>
+                <TableCell className={classes.table}> Player {idx+1} </TableCell>
+                <TableCell className={classes.table}> {info.score} </TableCell>
               </TableRow>
               )
             })}
@@ -40,24 +46,25 @@ class ScoreBoard extends React.Component<IScoreProps> {
     )
   }
 
-  private renderGameEndResult(): JSX.Element {
+  function renderGameEndResult(): JSX.Element {
     return (
       <div>
-        {this.isTie() ? (
+        {isTie() ? (
           <h1> It's a tie! </h1> ) : (
-          <h1> Player {this.getWinner()} Wins! </h1>
+          <h1> Player {getWinner()} Wins! </h1>
         )}
       </div>
     );
   }
 
-  private isTie(): boolean {
-    return this.props.players[0].score === this.props.players[1].score;
+  function isTie(): boolean {
+    return props.playerInfo[0].score === props.playerInfo[1].score;
   }
 
-  private getWinner(): number {
-    return this.props.players[0].score > this.props.players[1].score ? 1 : 2;
+  function getWinner(): number {
+    return props.playerInfo[0].score > props.playerInfo[1].score ? 1 : 2;
   }
+
 }
 
 export default ScoreBoard;
