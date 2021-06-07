@@ -1,6 +1,6 @@
 import React from "react";
 import SoSGrid from "./SoSGrid";
-import Score from "./Score";
+import ScoreBoard from "./ScoreBoard";
 import './Game.css';
 
 interface IGameProps {}
@@ -35,17 +35,29 @@ class Game extends React.Component<IGameProps, IGameState> {
     return (
       <div className="Game">
         <h1>SOS</h1>
-        <SoSGrid onSOS={this.handlers} onGridFull={this.handleFullGrid.bind(this)} onTurnEnd={this.handlers}/>
-        <Score gameEnd={this.state.gameEnd} players={this.state.players}/>
+        <SoSGrid onSOS={this.handleSOS} onGridFull={this.handleFullGrid} onTurnEnd={this.handleChangeTurns}/>
+        <hr className="solid"></hr>
+        <ScoreBoard gameEnd={this.state.gameEnd} players={this.state.players}/>
       </div>
     );
   }
 
-  private handlers(){
-
+  private handleSOS = () => {
+    let playInfo: [IPlayerInfo, IPlayerInfo];
+    playInfo = [...this.state.players];
+    playInfo.find((p) => p.active)!.score++;
+    this.setState({players: playInfo});
   }
 
-  private handleFullGrid(){
+  private handleChangeTurns = () => {
+    let playInfo: [IPlayerInfo, IPlayerInfo];
+    playInfo = [...this.state.players];
+    playInfo[0].active = !playInfo[0].active;
+    playInfo[1].active = !playInfo[1].active;
+    this.setState({players: playInfo});
+  }
+
+  private handleFullGrid = () => {
     this.setState({gameEnd: true});
   }
 }

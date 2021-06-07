@@ -2,7 +2,7 @@ import { Grid, } from "@material-ui/core";
 import React from "react";
 import Square from "./Square";
 
-type sosSet = [number, number, number];
+type sosSeq = [number, number, number];
 
 interface IGridProps {
   onSOS: () => void;
@@ -12,15 +12,13 @@ interface IGridProps {
 
 interface IGridState {
   squares: (string | null)[];
-  sosSets: sosSet[];
 }
 
 class SoSGrid extends React.Component<IGridProps, IGridState> {
   constructor(props: IGridProps){
     super(props);
     this.state = {
-      squares: Array(36).fill(null),
-      sosSets: []
+      squares: Array(36).fill(null)
     };
   }
 
@@ -41,9 +39,7 @@ class SoSGrid extends React.Component<IGridProps, IGridState> {
     let squares = [...this.state.squares];
     squares[idx] = value;
     this.setState({squares}, () => {
-      if(this.isSOS(idx)){
-        this.props.onSOS();
-      } else {
+      if(!this.sosCheckAndUpdate(idx)){
         this.props.onTurnEnd();
       }
       if (this.gridIsFull()){
@@ -52,12 +48,92 @@ class SoSGrid extends React.Component<IGridProps, IGridState> {
     });
   }
 
-  private isSOS(id: number): boolean {
-    // if yes, increment current player's score, player continues
-    // this.props.onSOS();
-    // if not, set turn to other player
-    // this.props.onTurnEnd();
+  private sosCheckAndUpdate(idx: number): boolean {
+    const sequences = this.findSequences(idx);
+    if (sequences.length){
+      sequences.forEach((s) => {
+        this.props.onSOS();
+      });
+      return true;
+    }
     return false;
+  }
+
+  private findSequences(idx: number): sosSeq[] {
+    let sequences: sosSeq[] = [];
+    const value = this.state.squares[idx];
+    if (value === 'S'){
+      sequences = this.getS_Sequences(idx);
+    } else if (value === 'O'){
+      sequences = this.getO_Sequences(idx);
+    }
+    return sequences;
+  }
+
+  private getS_Sequences(idx: number): sosSeq[] {
+    const row = Math.floor(idx / 6);
+    const col = idx % 6;
+    const sequences: sosSeq[] = [];
+    console.log(`row ${row}, and column ${col}, checking (${row-1},${col-1}) and (${row+1},${col+1})`);
+    if (this.checkSquare(row - 1, col - 1, 'O') && this.checkSquare(row - 2, col - 2, 'S')){
+      sequences.push([this.toIdx(row - 1, col - 1), idx, this.toIdx(row - 2, col - 2)]);
+    }
+    if (this.checkSquare(row + 1, col + 1, 'O') && this.checkSquare(row + 2, col + 2, 'S')){
+      sequences.push([this.toIdx(row + 1, col + 1), idx, this.toIdx(row + 2, col + 2)]);
+    }
+    if (this.checkSquare(row - 1, col + 1, 'O') && this.checkSquare(row - 2, col + 2, 'S')){
+      sequences.push([this.toIdx(row - 1, col + 1), idx, this.toIdx(row - 2, col + 2)]);
+    }
+    if (this.checkSquare(row + 1, col - 1, 'O') && this.checkSquare(row + 2, col - 2, 'S')){
+      sequences.push([this.toIdx(row + 1, col - 1), idx, this.toIdx(row + 2, col - 2)]);
+    }
+    if (this.checkSquare(row + 1, col, 'O') && this.checkSquare(row + 2, col, 'S')){
+      sequences.push([this.toIdx(row + 1, col), idx, this.toIdx(row + 2, col)]);
+    }
+    if (this.checkSquare(row - 1, col, 'O') && this.checkSquare(row - 2, col, 'S')){
+      sequences.push([this.toIdx(row - 1, col), idx, this.toIdx(row - 2, col)]);
+    }
+    if (this.checkSquare(row, col - 1, 'O') && this.checkSquare(row, col - 2, 'S')){
+      sequences.push([this.toIdx(row, col - 1), idx, this.toIdx(row, col - 2)]);
+    }
+    if (this.checkSquare(row, col + 1, 'O') && this.checkSquare(row, col + 2, 'S')){
+      sequences.push([this.toIdx(row, col + 1), idx, this.toIdx(row, col + 2)]);
+    }
+    return sequences;
+  }
+  
+  private getO_Sequences(idx: number): sosSeq[] {
+    const row = Math.floor(idx / 6);
+    const col = idx % 6;
+    const sequences: sosSeq[] = [];
+    if (this.checkSquare(row - 1, col - 1, 'S') && this.checkSquare(row + 1, col + 1, 'S')){
+      sequences.push([this.toIdx(row - 1, col - 1), idx, this.toIdx(row + 1, col + 1)]);
+    }
+    if (this.checkSquare(row - 1, col + 1, 'S') && this.checkSquare(row + 1, col - 1, 'S')){
+      sequences.push([this.toIdx(row - 1, col + 1), idx, this.toIdx(row + 1, col - 1)]);
+    }
+    if (this.checkSquare(row, col - 1, 'S') && this.checkSquare(row, col + 1, 'S')){
+      sequences.push([this.toIdx(row, col - 1), idx, this.toIdx(row, col + 1)]);
+    }
+    if (this.checkSquare(row - 1, col, 'S') && this.checkSquare(row + 1, col, 'S')){
+      sequences.push([this.toIdx(row - 1, col), idx, this.toIdx(row + 1, col)]);
+    }
+    return sequences;
+  }
+
+  private checkSquare(row: number, col: number, value: string): boolean {
+    if (row >= 0 && row < 6 && col >= 0 && col < 6){
+      const idx = this.toIdx(row, col);
+      if (this.state.squares[idx] === value){
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  private toIdx(row: number, col: number): number {
+    return (row * 6) + col;
   }
 
   private gridIsFull(): boolean {
