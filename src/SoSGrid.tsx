@@ -10,7 +10,7 @@ type GridProps = {
   onTurnEnd: () => void;
 }
 
-function SoSGrid(props: GridProps) {
+function SoSGrid(props: GridProps): JSX.Element {
   const gridIndices = generateIndices(6);
   const [squares, setSquares] = useState(Array(36).fill(null)); 
   const index = useRef(-1); 
@@ -29,7 +29,7 @@ function SoSGrid(props: GridProps) {
     </Grid>
   );
 
-  function updateGrid() {
+  function updateGrid(): void {
     if(!sosCheckAndUpdate(index.current) && index.current > -1){
       props.onTurnEnd();
     }
@@ -131,7 +131,6 @@ function SoSGrid(props: GridProps) {
   function gridIsFull(): boolean {
     return [...squares].indexOf(null) === -1;
   }
-
 }
 
 function generateIndices(size: number): number[] {

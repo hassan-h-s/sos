@@ -27,6 +27,9 @@ function ScoreBoard (props: ScoreProps): JSX.Element {
     return renderGameEndResult();
   }
 
+  /**
+   * Returns JSX.Element that is a table of players and scores
+   */
   function renderScoreTable(): JSX.Element {
     return (
       <TableContainer>
@@ -46,6 +49,9 @@ function ScoreBoard (props: ScoreProps): JSX.Element {
     )
   }
 
+  /**
+   * Returns JSX.Element that is an h1 tag of the final result of the game
+   */
   function renderGameEndResult(): JSX.Element {
     return (
       <div>
