@@ -11,7 +11,7 @@ type GridProps = {
 }
 
 function SoSGrid(props: GridProps): JSX.Element {
-  const gridIndices = generateIndices(6);
+  const gridIndices = generateGridIndices(6);
   const [squares, setSquares] = useState(Array(36).fill(null)); 
   const index = useRef(-1); 
 
@@ -29,15 +29,26 @@ function SoSGrid(props: GridProps): JSX.Element {
     </Grid>
   );
 
+  /**
+   * Gets new sequences in the grid. 
+   * If none, call onTurnEnd. If exists, call onSoS.
+   * Check if grid is full.
+   */
   function updateGrid(): void {
-    if(!sosCheckAndUpdate(index.current) && index.current > -1){
+    const seq = getSequences(index.current);
+    if (!seq.length && index.current > -1){
       props.onTurnEnd();
+    } else if (seq.length) { 
+      seq.forEach((s) => props.onSOS());
     }
     if (gridIsFull()){
       props.onGridFull();
     }
   }
 
+  /**
+   * set state to update value of the changed square
+   */
   function handleSquareChange(idx: number, value: string): void {
     let currentSq = [...squares];
     currentSq[idx] = value;
@@ -45,18 +56,10 @@ function SoSGrid(props: GridProps): JSX.Element {
     index.current = idx;
   }
 
-  function sosCheckAndUpdate(idx: number): boolean {
-    const sequences = findSequences(idx);
-    if (sequences.length){
-      sequences.forEach((s) => {
-        props.onSOS();
-      });
-      return true;
-    }
-    return false;
-  }
-
-  function findSequences(idx: number): sosSeq[] {
+  /**
+   * Checks for sequences of SOS
+   */
+  function getSequences(idx: number): sosSeq[] {
     let sequences: sosSeq[] = [];
     const value = squares[idx];
     if (value === 'S'){
@@ -67,6 +70,9 @@ function SoSGrid(props: GridProps): JSX.Element {
     return sequences;
   }
 
+  /**
+   * When modified square is 'S', check for all combinations of "O-S", diagonally, vertically, and horizontally
+   */
   function getS_Sequences(idx: number): sosSeq[] {
     const row = Math.floor(idx / 6);
     const col = idx % 6;
@@ -97,7 +103,10 @@ function SoSGrid(props: GridProps): JSX.Element {
     }
     return sequences;
   }
-  
+
+  /**
+   * When modified square is 'O', check for 'S on both sides, diagonally, vertically, and horizontally
+   */
   function getO_Sequences(idx: number): sosSeq[] {
     const row = Math.floor(idx / 6);
     const col = idx % 6;
@@ -117,6 +126,9 @@ function SoSGrid(props: GridProps): JSX.Element {
     return sequences;
   }
 
+  /**
+   * Helper function to get the current value of neighboring squares 
+   */
   function checkSquare(row: number, col: number, value: string): boolean {
     if (row >= 0 && row < 6 && col >= 0 && col < 6){
       const idx = toIdx(row, col);
@@ -128,12 +140,19 @@ function SoSGrid(props: GridProps): JSX.Element {
     return false;
   }
 
+  /**
+   * Check if grid is full, i.e. no null 
+   */
   function gridIsFull(): boolean {
     return [...squares].indexOf(null) === -1;
   }
 }
 
-function generateIndices(size: number): number[] {
+
+/**
+ * Generates 0-35 indices for a 6x6 grid 
+ */
+function generateGridIndices(size: number): number[] {
   const indices: number[] = [];
   for (let i = 0; i < size; i++){
     for (let j = 0; j < size; j++){
@@ -143,6 +162,9 @@ function generateIndices(size: number): number[] {
   return indices;
 }
 
+/**
+ * Helper function to convert index back to row/col coordinates
+ */
 function toIdx(row: number, col: number): number {
   return (row * 6) + col;
 }

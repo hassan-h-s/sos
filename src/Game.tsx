@@ -17,7 +17,7 @@ function Game (): JSX.Element {
   return (
     <div className="Game">
       <h1>SOS</h1>
-      <p>{getGameInstructions}</p>
+      <p>{getGameInstructions()}</p>
       <SoSGrid onSOS={handleSOS} onGridFull={handleFullGrid} onTurnEnd={handleChangeTurns}/>
       <hr className="solid"/>
       <ScoreBoard gameEnd={gameEnd} playerInfo={playerInfo}/>
@@ -51,10 +51,10 @@ function Game (): JSX.Element {
   }
 
   function getGameInstructions(): string {
-    return `The object of the game is for each player to attempt to create as many sequences of SOS as they can.
-        Take turns to add to a square either an "S" by clicking or an "O" by right-clicking.
-        If a player succeeds in creating a sequence, they get another turn. If not, the other player gets to go.
-        A sequence can be vertical, horizontal, or diagonal.`
+    return `The objective of the game is for each player to attempt to create as many sequences of SOS as they can.
+        Take turns to put an "S", by clicking, or an "O", by right-clicking, in an empty square.
+        If a player completes a sequence, they get another turn. If not, the other player gets to go.
+        The sequence can be vertical, horizontal, or diagonal.`
   }
 }
 

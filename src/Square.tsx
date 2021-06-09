@@ -8,6 +8,7 @@ type SqProps = {
 
 function Square (props: SqProps): JSX.Element {
   const [value, setValue] = useState<null | string>(null);
+  
   return (
     <button className="square"
             onClick={handleClick}
@@ -15,7 +16,7 @@ function Square (props: SqProps): JSX.Element {
   );
   
   /**
-   * Sets the state value of the square component on click
+   * Sets the state of the square component on click
    */
   function handleClick(): void {
     if(!value){
@@ -25,7 +26,7 @@ function Square (props: SqProps): JSX.Element {
   }
 
   /**
-   * Sets the state value of the square component on right click. 
+   * Sets the state of the square component on right click. 
    * Disables default browser context menu
    */
   function handleRightClick(e: React.MouseEvent): void {
